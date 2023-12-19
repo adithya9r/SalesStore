@@ -1,0 +1,43 @@
+SELECT * FROM adithya.SalesStore;
+
+------------------------------------
+SELECT DISTINCT Region FROM adithya.SalesStore;
+SELECT DISTINCT Customer_Segment FROM adithya.SalesStore; -- Should plot these points against sales. my thesis is that corporate and small business will have highest sales
+SELECT DISTINCT Product_Category FROM adithya.SalesStore;-- if thesis is that corp and sb have highest sales, then office supplies will have highest portion
+SELECT DISTINCT Product_Subcategory   FROM adithya.SalesStore;
+------------------------------------
+SELECT Customer_Segment, Region, SUM(Sales) AS TotalSales
+FROM adithya.SalesStore
+GROUP BY Customer_Segment, Region
+ORDER BY TotalSales DESC;
+-- Makes sense that sales are particularly high for corporate segment in northwest territories
+------------------------------------
+SELECT Product_Name, Sales, Profit, Order_Quantity,
+	CASE
+	WHEN Profit > 100 THEN 'Profitable Product'
+	WHEN Profit = 100 THEN 'Average Product'
+	ELSE 'Unprofitable Product'
+
+END AS Profit_Outlook
+FROM adithya.SalesStore
+ORDER BY Sales DESC;
+-- This is interesting I wonder if shipping costs potentially factor into the sales of products? Also my earlier thesis that corporate customers contribute to sales seems to be right as top 3 items in Profit are 1) Binding Machine 2) VCU and 3) Digital Copier
+-- Top 3 in sales are Advanced Copier, Copier, and Video Conferencing unit. Potentially need to ship larger quantities to receive higher profit? 
+------------------------------------
+SELECT COUNT(Product_Subcategory)
+FROM adithya.SalesStore
+where Profit > 1000;
+-- More products are in profit than not. Sales Store is doing well and potentially needs to cut costs in other areas and increase marketing if the previous thesis regarding shipping larger quantites leads to profit is true
+------------------------------------
+SELECT Product_Subcategory, Sum(Sales) AS TotalSales, Sum(Profit) AS TotalProfit, Sum(Order_Quantity) AS TotalQuantity
+FROM adithya.SalesStore
+GROUP BY Product_Subcategory
+Order by SUM(Profit);-- Change Sum(x) to rank metrics
+-- very helpful to plot area graph to better understand. 
+-- -Highest Sales: Telephone and Communication
+-- -Highest Profit: Telephone and Communications
+-- -Highest # Sold: Paper (obvious) and Binders and Binder Accessories
+----------------------
+SELECT Order_Priority, Sum(Order_Quantity) AS TotalSales
+FROM adithya.SalesStore
+GROUP BY Order_Priority;-- didn't provide much insight, seems all orders are somewhat evely prioritized...shows no shortage  and a calm market for all orders
