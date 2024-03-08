@@ -1,2 +1,2 @@
 # SalesStore
-SQL and Tableau project
+SQL project
